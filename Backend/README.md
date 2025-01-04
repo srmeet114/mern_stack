@@ -44,3 +44,44 @@ Example:
   "password": "password123"
 }
 ```
+
+### GET /users/profile
+
+#### Description
+This endpoint retrieves the profile of the authenticated user.
+
+#### Response Body
+The response body will be a JSON object with the following fields:
+- `_id` (string): The user's unique identifier.
+- `fullname`: An object containing:
+  - `firstname` (string): The user's first name.
+  - `lastname` (string): The user's last name.
+- `email` (string): The user's email.
+
+Example:
+```json
+{
+  "_id": "60d0fe4f5311236168a109ca",
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com"
+}
+```
+
+### POST /users/logout
+
+#### Description
+This endpoint logs out the authenticated user.
+
+#### Response Body
+The response body will be a JSON object with the following field:
+- `message` (string): A message indicating the user has been logged out successfully.
+
+Example:
+```json
+{
+  "message": "User logged out successfully"
+}
+```
