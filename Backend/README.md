@@ -25,8 +25,8 @@ Example:
   "email": "john.doe@example.com",
   "password": "password123"
 }
-
 ```
+
 ### POST /users/login
 
 #### Description
@@ -83,5 +83,41 @@ Example:
 ```json
 {
   "message": "User logged out successfully"
+}
+```
+
+### POST /captains/register
+
+#### Description
+This endpoint registers a new captain.
+
+#### Request Body
+The request body should be a JSON object with the following fields:
+- `fullname`: An object containing:
+  - `firstname` (string, required, minimum 3 characters)
+  - `lastname` (string, optional, minimum 3 characters)
+- `email` (string, required, must be a valid email)
+- `password` (string, required, minimum 6 characters)
+- `vehicle`: An object containing:
+  - `color` (string, required, minimum 3 characters)
+  - `plate` (string, required, minimum 3 characters)
+  - `capacity` (number, required)
+  - `vehicleType` (string, required, must be one of 'car', 'motorcycle', 'auto')
+
+Example:
+```json
+{
+  "fullname": {
+    "firstname": "Jane",
+    "lastname": "Doe"
+  },
+  "email": "jane.doe@example.com",
+  "password": "password123",
+  "vehicle": {
+    "color": "red",
+    "plate": "XYZ123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
 }
 ```
