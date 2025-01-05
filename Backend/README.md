@@ -121,3 +121,19 @@ Example:
   }
 }
 ```
+### POST /captains/login
+
+#### Description
+This endpoint logs in an existing captain.
+
+#### Request Body
+The request body should be a JSON object with the following fields:
+- `email` (string, required, must be a valid email)
+- `password` (string, required, minimum 6 characters)
+
+Example:
+```json
+{
+  "email": "jane.doe@example.com",
+  "password": "password123"
+}
