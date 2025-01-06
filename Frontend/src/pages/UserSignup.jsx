@@ -1,23 +1,27 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { SinupUser } from "../server/api/api";
+import { toast } from "react-toastify";
 
 const UserSignup = () => {
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
+  const navigate = useNavigate()
+  const notify = (message) => toast.success(message);
+  const notifyerr = (message) => toast.error(message);
+
   const onSubmit = (data) => {
-    const Data = {
-      fullName: {
-        firstName: data.firstName,
-        lastName: data.lastName
+    const Sinupdata = {
+      fullname: {
+        firstname: data.firstName,
+        lastname: data.lastName
       },
       email: data.email,
       password: data.password
     };
-    console.log(Data);
-    
-    reset();
+    SinupUser(Sinupdata,reset,navigate,notify,notifyerr)
   }
 
   return (
@@ -98,7 +102,7 @@ const UserSignup = () => {
             <p className="text-red-500">{errors.password.message}</p>
           )}
           <button className="bg-[#111] mt-7 text-[#fff] font-medium rounded-lg mb-4 px-4 py-2 border w-full text-lg placeholder:text-base">
-            Signup
+            Create account
           </button>
           <p className="text-center">
             Already have an account?{" "}

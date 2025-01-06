@@ -1,19 +1,24 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { CaptainsLogin } from "../server/api/api";
+import { toast } from "react-toastify";
 
 const CaptainLogin = () => {
   const {
-      register,
-      handleSubmit,
-      formState: { errors },
-      reset,
-    } = useForm();
-  
-    const onSubmit = (data) => {
-      console.log(data);
-      reset();
-    };
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  const navigate = useNavigate();
+  const notify = (message) => toast.success(message);
+  const notifyerr = (message) => toast.error(message);
+
+  const onSubmit = (Data) => {
+    CaptainsLogin(reset, Data, navigate, notify, notifyerr);
+  };
   return (
     <div className="p-7 flex flex-col justify-between h-screen">
       <div>
@@ -63,9 +68,9 @@ const CaptainLogin = () => {
             Login
           </button>
           <p className="text-center">
-          Join a fleet?{" "}
+            Join a fleet?{" "}
             <Link to="/captain-signup" className="text-blue-600 font-medium">
-            Register as a Captain
+              Register as a Captain
             </Link>
           </p>
         </form>
@@ -79,7 +84,7 @@ const CaptainLogin = () => {
         </Link>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CaptainLogin
+export default CaptainLogin;

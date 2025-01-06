@@ -33,7 +33,7 @@ module.exports.registerCaptain = async (req, res, next) => {
 
     const token = captain.generateAuthToken();
 
-    res.status(201).json({ token, captain });
+    res.status(201).json({ token, captain, message: 'Captain created successfully' });
 
 }
 
@@ -61,7 +61,7 @@ module.exports.loginCaptain = async (req, res, next) => {
 
     res.cookie('token',token);
 
-    res.status(200).json({token,captain})
+    res.status(200).json({token,captain, message:"Captain Login Successfully"});
 }
 
 module.exports.getCaptainProfile = async (req, res, next) => {

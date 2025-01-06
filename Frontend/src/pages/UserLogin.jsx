@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { SinInUser } from "../server/api/api";
+import { toast } from "react-toastify";
+import { UserDataContext } from "../context/UserContext";
 
 const UserLogin = () => {
   const {
@@ -10,9 +13,13 @@ const UserLogin = () => {
     reset,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    reset();
+  const {user, setUser} = useContext(UserDataContext);
+  const navigate = useNavigate()
+  const notify = (message) => toast.success(message);
+  const notifyerr = (message) => toast.error(message);
+
+  const onSubmit = (Sinindata) => {
+    SinInUser(Sinindata, notify ,notifyerr,reset,navigate,setUser);
   };
 
   return (
