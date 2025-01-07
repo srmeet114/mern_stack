@@ -8,18 +8,15 @@ const CaptainProtectWrapper = ({ children }) => {
     const navigate = useNavigate();
 
     const {captain, setCaptain} = useContext(CaptainDataContext);
-    const {loading, setLoading} = useState(true);
+    const [loading, setLoading] = useState(true);
   
     useEffect(() => {
       if (!token) {
         navigate("/captain-login");
         return null;
       }
-    }, [token]);
-
-    useEffect(() => {
       CaptainGetProfile(setCaptain, setLoading, navigate);
-    }, []);
+    }, [token]);
 
     if (loading) {
       return (

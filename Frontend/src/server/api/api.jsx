@@ -7,14 +7,16 @@ export const SinupUser = async (
   reset,
   navigate,
   notify,
-  notifyerr
+  notifyerr,
+  setUser
 ) => {
   try {
     const response = await axios.post(`${url}/users/register`, Sinupdata);
-    navigate("/login");
     notify(response.data.message);
+    setUser(response.data.user)
     localStorage.setItem("token", response.data.token);
     reset();
+    navigate("/login");
   } catch (err) {
     console.log(err);
     notifyerr(err.response?.data.errors || err.message);
@@ -31,11 +33,11 @@ export const SinInUser = async (
 ) => {
   try {
     const response = await axios.post(`${url}/users/login`, Sinindata);
-    navigate("/home");
     notify(response.data.message);
     localStorage.setItem("token", response.data.token);
     setUser(response.data.user);
     reset();
+    navigate("/home");
   } catch (err) {
     console.log(err);
     notifyerr(err.response?.data.errors || err.message);
@@ -69,7 +71,7 @@ export const CaptainsRegister = async (
     localStorage.setItem("token", response.data.token);
     setCaptain(response.captain);
     notify(response.data.message);
-    navigate("/captain-login");
+    navigate("/captain-home");
     reset();
     notifyerr(err.response?.data.errors || err.message);
   } catch (err) {
@@ -82,11 +84,13 @@ export const CaptainsLogin = async (
   Data,
   navigate,
   notify,
-  notifyerr
+  notifyerr,
+  setCaptain
 ) => {
   try {
     const response = await axios.post(`${url}/captains/login`, Data);
     localStorage.setItem("token", response.data.token);
+    setCaptain(response.data.captain);
     notify(response.data.message);
     navigate("/captain-home");
     reset();
@@ -105,7 +109,6 @@ export const CaptainGetProfile = async (setCaptain, setLoading, navigate) => {
       },
     });
     console.log(response);
-    setLoading(false);
     setCaptain(response.data.captain);
   } catch (err) {
     console.log(err);
@@ -116,17 +119,17 @@ export const CaptainGetProfile = async (setCaptain, setLoading, navigate) => {
   }
 };
 
-export const UserGetProfile = async (setUser, setLoading) => {
+export const UserGetProfile = async (setUser, setLoading, navigate) => {
   try {
     const response = await axios.get(`${url}/users/profile`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
-    console.log(response);
     setUser(response.data.user);
-    setLoading(false);
   } catch (err) {
     console.log(err);
     localStorage.removeItem("token");
-    navigate("captain-login");
+    navigate("/login");
+  }finally {
+    setLoading(false);
   }
 };

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserGetProfile } from "../server/api/api";
 import { UserDataContext } from "../context/UserContext";
@@ -8,17 +8,21 @@ const UserProtaectWrapper = ({ children }) => {
   const navigate = useNavigate();
 
   const { user, setUser } = useContext(UserDataContext);
-  const { loading, setLoading } = useState(true);
+  const [ loading, setLoading ] = useState(true);
 
   useEffect(() => {
     if (!token) {
       navigate("/login");
-      return null;
     }
+    UserGetProfile(setUser,setLoading,navigate)
   }, [token]);
 
-  UserGetProfile(setUser,setLoading,navigate)
-  
+
+  if (loading) {
+    return (
+      <div>Loading...</div>
+    )
+  }
 
   return <div>{children}</div>;
 };

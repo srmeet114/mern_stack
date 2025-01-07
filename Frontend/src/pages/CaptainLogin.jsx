@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { CaptainsLogin } from "../server/api/api";
 import { toast } from "react-toastify";
+import CaptainDataContext from "../context/CaptainContext";
 
 const CaptainLogin = () => {
   const {
@@ -12,12 +13,13 @@ const CaptainLogin = () => {
     reset,
   } = useForm();
 
+  const {captain, setCaptain} = useContext(CaptainDataContext);
   const navigate = useNavigate();
   const notify = (message) => toast.success(message);
   const notifyerr = (message) => toast.error(message);
 
   const onSubmit = (Data) => {
-    CaptainsLogin(reset, Data, navigate, notify, notifyerr);
+    CaptainsLogin(reset, Data, navigate, notify, notifyerr, setCaptain);
   };
   return (
     <div className="p-7 flex flex-col justify-between h-screen">

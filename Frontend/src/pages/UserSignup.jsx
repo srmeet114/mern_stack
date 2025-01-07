@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { SinupUser } from "../server/api/api";
 import { toast } from "react-toastify";
+import { UserDataContext } from "../context/UserContext";
 
 const UserSignup = () => {
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
 
+  const { user, setUser } = useContext(UserDataContext);
   const navigate = useNavigate()
   const notify = (message) => toast.success(message);
   const notifyerr = (message) => toast.error(message);
@@ -21,7 +23,7 @@ const UserSignup = () => {
       email: data.email,
       password: data.password
     };
-    SinupUser(Sinupdata,reset,navigate,notify,notifyerr)
+    SinupUser(Sinupdata,reset,navigate,notify,notifyerr,setUser)
   }
 
   return (
