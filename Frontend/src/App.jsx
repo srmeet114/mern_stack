@@ -1,16 +1,18 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Start from "./pages/Start";
+import Start from "./pages/User/Start";
 import UserLogin from "./pages/UserLogin";
 import UserSignup from "./pages/UserSignup";
 import CaptainLogin from "./pages/CaptainLogin";
 import CaptainSingup from "./pages/CaptainSingup";
-import Home from "./pages/Home";
+import Home from "./pages/User/Home";
 import { ToastContainer } from "react-toastify";
 import UserProtaectWrapper from "./pages/UserProtaectWrapper";
 import UserLogout from "./pages/UserLogout";
-import CaptainHome from "./pages/CaptainHome";
+import CaptainHome from "./pages/Captain/CaptainHome";
 import CaptainProtectWrapper from "./pages/CaptainProtectWrapper";
+import Riding from "./pages/Riding";
+import CaptainRiding from "./pages/Captain/CaptainRiding";
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
         <Route path="/signup" element={<UserSignup />} />
         <Route path="/captain-login" element={<CaptainLogin />} />
         <Route path="/captain-signup" element={<CaptainSingup />} />
+        <Route path="/riding" element={<Riding />} />
+        <Route path="/captainriding" element={<CaptainRiding />} />
         <Route
           path="/home"
           element={

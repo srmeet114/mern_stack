@@ -100,6 +100,20 @@ export const CaptainsLogin = async (
   }
 };
 
+export const LogoutCaptain = async () => {
+  axios
+    .get(`${url}/captains/logout`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      if (res.status === 200) {
+        localStorage.removeItem("token");
+      }
+    });
+};
+
 export const CaptainGetProfile = async (setCaptain, setLoading, navigate) => {
   try {
     const response = await axios.get(`${url}/captains/profile`, {
@@ -108,7 +122,6 @@ export const CaptainGetProfile = async (setCaptain, setLoading, navigate) => {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     });
-    console.log(response);
     setCaptain(response.data.captain);
   } catch (err) {
     console.log(err);
@@ -119,7 +132,7 @@ export const CaptainGetProfile = async (setCaptain, setLoading, navigate) => {
   }
 };
 
-export const UserGetProfile = async (setUser, setLoading, navigate) => {
+export const UserGetProfile = async (setUser, setLoading, navigate,notifyerr) => {
   try {
     const response = await axios.get(`${url}/users/profile`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -128,6 +141,7 @@ export const UserGetProfile = async (setUser, setLoading, navigate) => {
   } catch (err) {
     console.log(err);
     localStorage.removeItem("token");
+    notifyerr(err.message)
     navigate("/login");
   }finally {
     setLoading(false);

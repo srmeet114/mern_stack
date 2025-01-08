@@ -2,11 +2,11 @@ import React, { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import LocationserchPanel from "../components/LocationserchPanel";
-import VehiclePanel from "../components/VehiclePanel";
-import ConfirmRide from "../components/ConfirmRide";
-import LookingForDriver from "../components/LookingForDriver";
-import WaitingForDriver from "../components/WaitingForDriver";
+import LocationserchPanel from "../../components/LocationserchPanel";
+import VehiclePanel from "../../components/VehiclePanel";
+import ConfirmRide from "../../components/ConfirmRide";
+import LookingForDriver from "../../components/LookingForDriver";
+import WaitingForDriver from "../../components/WaitingForDriver";
 
 const Home = () => {
   const [pickup, setpickup] = useState("");
