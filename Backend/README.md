@@ -137,3 +137,18 @@ Example:
   "email": "jane.doe@example.com",
   "password": "password123"
 }
+
+```
+### POST /captains/profile
+
+### POST /captains/logout
+
+### POST /maps/get-coordinates
+
+### POST /maps/get-distance-time
+
+### POST /maps/get-suggestions
+
+### POST /rides/create
+
+```

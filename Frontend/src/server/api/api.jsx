@@ -147,3 +147,21 @@ export const UserGetProfile = async (setUser, setLoading, navigate,notifyerr) =>
     setLoading(false);
   }
 };
+
+export const FindTrips = async (pickup,destination) =>{
+
+  try {
+    const response = await axios.get(`${url}/rides/get-fare/${pickup}/${destination}`, {
+      // params: {
+      //   pickup: pickup,
+      //   destination: destination
+      // },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+    console.log(response);
+  } catch (err) {
+    console.log(err);
+  }
+}

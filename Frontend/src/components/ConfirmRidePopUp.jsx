@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { MdOutlineKeyboardArrowDown, MdPayments } from "react-icons/md";
 import { IoLocationSharp } from "react-icons/io5";
 import { RiUserLocationFill } from "react-icons/ri";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const ConfirmRidePopUp = (props) => {

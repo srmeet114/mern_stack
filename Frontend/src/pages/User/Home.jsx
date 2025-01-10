@@ -7,27 +7,26 @@ import VehiclePanel from "../../components/VehiclePanel";
 import ConfirmRide from "../../components/ConfirmRide";
 import LookingForDriver from "../../components/LookingForDriver";
 import WaitingForDriver from "../../components/WaitingForDriver";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { FindTrips } from "../../server/api/api";
 
 const Home = () => {
-  const [pickup, setpickup] = useState("");
-  const [destination, setDestination] = useState("");
-
-  const [panelOpen, setPanelOpen] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(null);
   const [vehiclePanelOpne, setVehiclePanelOpne] = useState(false);
-  const [confirmRidePanel, setConfirmRidePanel] = useState(false)
+  const [confirmRidePanel, setConfirmRidePanel] = useState(false);
   const [lookingForDriver, setLookingForDriver] = useState(false);
-  const [waitingDriver, setWaitingDriver] = useState(false)
+  const [waitingDriver, setWaitingDriver] = useState(false);
+  const [btnSow, setbtnSow] = useState(false);
+  const [fare, setFare] = useState({});
 
   const panelRef = useRef(null);
   const pamelCloseRef = useRef(null);
   const vehiclePanelRef = useRef(null);
-  const confirmRidePanelRef = useRef(null)
-  const lookingForDriverRef = useRef(null)
-  const watingforDriverRef = useRef(null)
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-  };
+  const confirmRidePanelRef = useRef(null);
+  const lookingForDriverRef = useRef(null);
+  const watingforDriverRef = useRef(null);
+  const btnSowRef = useRef(null);
 
   useGSAP(
     function () {
@@ -114,6 +113,77 @@ const Home = () => {
     [waitingDriver]
   );
 
+  useGSAP(
+    function () {
+      if (btnSow) {
+        gsap.to(btnSowRef.current, {
+          opacity: 1,
+        });
+      } else {
+        gsap.to(btnSowRef.current, {
+          opacity: 0,
+        });
+      }
+    },
+    [btnSow]
+  );
+
+  const { register, handleSubmit, setValue,getValues } = useForm();
+  const [pickupSuggestions, setPickupSuggestions] = useState([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState([]);
+  const [activeField, setActiveField] = useState(null);
+
+  const fetchSuggestions = async (query, type) => {
+    try {
+      let response;
+      if (type === "pickup") {
+        response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
+          {
+            params: { input: query },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setPickupSuggestions(response.data);
+      } else {
+        response = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
+          {
+            params: { input: query },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        setDestinationSuggestions(response.data);
+      }
+    } catch (error) {
+      console.error(
+        "Error fetching suggestions:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log(e);
+    
+  };
+
+  const findTrip = () => {
+    setVehiclePanelOpne(true);
+    setPanelOpen(false);
+
+    const values = getValues();
+    const pickup = values.pickup
+    const destination = values.destination
+    console.log(`Pickup: ${pickup}, Destination: ${destination}`);
+    FindTrips(pickup,destination);
+  };
+
   return (
     <div className="h-screen relative overflow-hidden">
       <img
@@ -139,45 +209,71 @@ const Home = () => {
             ref={pamelCloseRef}
             onClick={() => {
               setPanelOpen(false);
+              setbtnSow(false);
             }}
             className="absolute opacity-0 right-6 top-6 text-3xl"
           >
             <MdOutlineKeyboardArrowDown />
           </h5>
           <h4 className="text-3xl font-semibold ">Find a trip</h4>
-          <form
-            onSubmit={(e) => {
-              submitHandler(e);
-            }}
-          >
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="line absolute h-16 w-1 top-[45%] left-10 bg-gray-900 rounded-full"></div>
             <input
               className="bg-[#eee] px-12 py-2 text-base rounded-lg w-full mt-5"
               onClick={() => {
-                setPanelOpen(true);
+                setPanelOpen("pickup");
+                setActiveField("pickup");
+                setbtnSow(true)
               }}
               type="text"
               placeholder="Add a pick-up location"
-              value={pickup}
-              onChange={(e) => setpickup(e.target.value)}
+              {...register("pickup", {
+                onChange: (e) => {
+                  setValue("pickup", e.target.value);
+                  fetchSuggestions(e.target.value, "pickup");
+                },
+              })}
             />
             <input
               className="bg-[#eee] px-12 py-2 text-base rounded-lg w-full mt-3"
               onClick={() => {
-                setPanelOpen(true);
+                setPanelOpen("destination");
+                setActiveField("destination");
               }}
               type="text"
               placeholder="Enter your destination"
-              value={destination}
-              onChange={(e) => setDestination(e.target.value)}
+              {...register("destination", {
+                onChange: (e) => {
+                  setValue("destination", e.target.value);
+                  fetchSuggestions(e.target.value, "destination");
+                },
+              })}
             />
           </form>
+          <button
+            ref={btnSowRef}
+            onClick={findTrip}
+            type="submit"
+            className="bg-black text-white px-4 py-2 rounded-lg mt-3 w-full"
+          >
+            Find Trip
+          </button>
         </div>
         <div ref={panelRef} className="h-0 bg-white">
           <LocationserchPanel
             setPanelOpen={setPanelOpen}
             vehiclePanel={vehiclePanelOpne}
             setVehiclePanel={setVehiclePanelOpne}
+            activeField={activeField}
+            suggestions={
+              activeField === "pickup"
+                ? pickupSuggestions
+                : activeField === "destination"
+                ? destinationSuggestions
+                : []
+            }
+            setPickup={(value) => setValue("pickup", value)}
+            setDestination={(value) => setValue("destination", value)}
           />
         </div>
       </div>
@@ -185,25 +281,31 @@ const Home = () => {
         ref={vehiclePanelRef}
         className="fixed z-10 bottom-0 bg-white py-10 translate-y-full px-3 w-full pt-12"
       >
-        <VehiclePanel setConfirmRidePanel={setConfirmRidePanel} setVehiclePanelOpne={setVehiclePanelOpne}/>
+        <VehiclePanel
+          setConfirmRidePanel={setConfirmRidePanel}
+          setVehiclePanelOpne={setVehiclePanelOpne}
+        />
       </div>
       <div
         ref={confirmRidePanelRef}
         className="fixed z-10 bottom-0 bg-white py-6 translate-y-full px-3 w-full pt-12"
       >
-        <ConfirmRide setConfirmRidePanel={setConfirmRidePanel} setLookingForDriver={setLookingForDriver}/>
+        <ConfirmRide
+          setConfirmRidePanel={setConfirmRidePanel}
+          setLookingForDriver={setLookingForDriver}
+        />
       </div>
       <div
         ref={lookingForDriverRef}
         className="fixed z-10 bottom-0 bg-white py-6 translate-y-full px-3 w-full pt-12"
       >
-        <LookingForDriver setLookingForDriver={setLookingForDriver}/>
+        <LookingForDriver setLookingForDriver={setLookingForDriver} />
       </div>
       <div
         ref={watingforDriverRef}
         className="fixed z-10 bottom-0 bg-white translate-y-full py-6 px-3 w-full pt-12"
       >
-        <WaitingForDriver setWaitingDriver={setWaitingDriver}/>
+        <WaitingForDriver setWaitingDriver={setWaitingDriver} />
       </div>
     </div>
   );

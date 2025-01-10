@@ -2,25 +2,27 @@ import React from "react";
 import { IoLocationSharp } from "react-icons/io5";
 
 const LocationserchPanel = (props) => {
-  const location = [
-    "248, Nrear kapor's cage, Sheryians Codeing School, Bhopal",
-    "258, Nrear Singhai's cage, Sheryians Codeing School, Bhopal",
-    "12A, Nrear Maholtra's's cage, Sheryians Codeing School, Bhopal",
-    "25S, Nrear Singhai's cage, Sheryians Codeing School, Bhopal",
-  ];
+  const handleSuggestionClick = (suggestion) => {
+    if (props.activeField === 'pickup') {
+      props.setPickup(suggestion.description);
+    } else if (props.activeField === 'destination') {
+      props.setDestination(suggestion.description);
+    }
+    // props.setPanelOpen(null);
+    // props.setVehiclePanel(true);
+  };
 
   return (
     <div>
-      {/* this is jsut a test */}
       <div>
-        {location.map((e, index) => {
+        {props.suggestions.map((suggestion, index) => {
           return (
-            <div key={index} onClick={()=>{props.setVehiclePanel(true),props.setPanelOpen(false)}}>
+            <div key={index} onClick={() => handleSuggestionClick(suggestion)}>
               <div className="flex gap-4 items-center my-4 justify-start border-2 border-gray-100 px-2 py-2 rounded-xl active:border-black">
                 <h2 className="bg-[#eee] p-2 text-md rounded-full">
                   <IoLocationSharp />
                 </h2>
-                <h4 className="font-medium">{e}</h4>
+                <h4 className="font-medium">{suggestion.description}</h4>
               </div>
             </div>
           );
