@@ -4,11 +4,15 @@ import { IoLocationSharp } from "react-icons/io5";
 import { RiUserLocationFill } from "react-icons/ri";
 
 const ConfirmRide = (props) => {
+  const values = props.getValues();
+  const pickup = values.pickup;
+  const destination = values.destination;
+
   return (
     <div>
       <h3
         onClick={() => {
-            props.setConfirmRidePanel(false);
+          props.setConfirmRidePanel(false);
         }}
         className="py-1 text-center flex justify-center w-[93%] absolute top-0"
       >
@@ -27,7 +31,7 @@ const ConfirmRide = (props) => {
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
               <p className="text-base text-gray-600 -mt-1">
-                Kankariya Talab, Bhopal
+                {pickup}
               </p>
             </div>
           </div>
@@ -36,21 +40,28 @@ const ConfirmRide = (props) => {
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
               <p className="text-base text-gray-600 -mt-1">
-                Kankariya Talab, Bhopal
+                {destination}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-4 p-2">
             <MdPayments className="text-xl" />
             <div>
-              <h3 className="text-lg font-medium">192.20</h3>
-              <p className="text-base text-gray-600 -mt-1">
-                Cash
-              </p>
+              <h3 className="text-lg font-medium">
+                ₹{props.fare[props.vehiclrType]}
+              </h3>
+              <p className="text-base text-gray-600 -mt-1">Cash</p>
             </div>
           </div>
         </div>
-        <button onClick={()=>{props.setLookingForDriver(true),props.setConfirmRidePanel(false)}} className="w-full mt-5 bg-green-600 active:bg-green-700 text-white font-semibold p-2 rounded-lg">
+        <button
+          onClick={() => {
+            props.setLookingForDriver(true),
+              props.setConfirmRidePanel(false),
+              props.createRide();
+          }}
+          className="w-full mt-5 bg-green-600 active:bg-green-700 text-white font-semibold p-2 rounded-lg"
+        >
           Confirm
         </button>
       </div>

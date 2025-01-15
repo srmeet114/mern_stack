@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { IoExitOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useGSAP } from "@gsap/react";
@@ -6,23 +6,78 @@ import gsap from "gsap";
 import RidePopUp from "../../components/RidePopUp";
 import CaptainDetails from "../../components/CaptainDetails";
 import ConfirmRidePopUp from "../../components/ConfirmRidePopUp";
+import { useSocket } from "../../context/SocketContext";
+import { CaptainDataContext } from "../../context/CaptainContext";
+import axios from "axios";
 
 const CaptainHome = () => {
-  const [ridePopPanel, setRidePopPanel] = useState(true);
+  const [ridePopPanel, setRidePopPanel] = useState(false);
   const [confirmRidePopPanel, setConfirmRidePopPanel] = useState(false);
+  const [ride, setRide] = useState(null)
   const ridePopPanelRef = useRef(null);
   const confirmRidePopPanelRef = useRef(null);
+  const { socket } = useSocket();
+  const { captain } = useContext(CaptainDataContext);
+
+  useEffect(() => {
+    socket.emit("join", { userType: "captain", userId: captain.captain._id });
+
+    const updateLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          socket.emit("update-location-captain", {
+            userId: captain.captain._id,
+            location: {
+              ltd: position.coords.latitude,
+              lng: position.coords.longitude,
+            },
+          });
+        });
+      }
+    };
+
+    const locationInterval = setInterval(updateLocation, 10000);
+    updateLocation();
+    // return () => clearInterval(locationInterval);
+  }, [captain.captain, socket]);
+
+  socket.on('new-ride',(data)=>{
+    console.log(data)
+    setRide(data)
+    setRidePopPanel(true)
+  })
+
+  const confirmRide = async () =>{
+    
+    const token = localStorage.getItem("token")
+    
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`,{
+      rideId:ride._id,
+      captainId:captain.captain._id,
+    },{
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    console.log(response);
+    
+    socket.emit('confirm-ride',{
+      userId: captain.captain._id,
+      rideId: ride._id
+    })
+  }
 
   useGSAP(
     function () {
       if (ridePopPanel) {
         gsap.to(ridePopPanelRef.current, {
-          transform:'translateY(0)',
+          transform: "translateY(0)",
           opacity: 1,
         });
       } else {
         gsap.to(ridePopPanelRef.current, {
-          transform:'translateY(100%)',
+          transform: "translateY(100%)",
           opacity: 0,
         });
       }
@@ -33,12 +88,12 @@ const CaptainHome = () => {
     function () {
       if (confirmRidePopPanel) {
         gsap.to(confirmRidePopPanelRef.current, {
-          transform:'translateY(0)',
+          transform: "translateY(0)",
           opacity: 1,
         });
       } else {
         gsap.to(confirmRidePopPanelRef.current, {
-          transform:'translateY(100%)',
+          transform: "translateY(100%)",
           opacity: 0,
         });
       }
@@ -72,11 +127,25 @@ const CaptainHome = () => {
       <div className="h-2/5 p-4">
         <CaptainDetails />
       </div>
-      <div ref={ridePopPanelRef} className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12">
-        <RidePopUp setRidePopPanel={setRidePopPanel} setConfirmRidePopPanel={setConfirmRidePopPanel}/>
+      <div
+        ref={ridePopPanelRef}
+        className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
+      >
+        <RidePopUp
+          ride={ride}
+          setRidePopPanel={setRidePopPanel}
+          setConfirmRidePopPanel={setConfirmRidePopPanel}
+          confirmRide={confirmRide}
+        />
       </div>
-      <div ref={confirmRidePopPanelRef} className="fixed w-full h-screen z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12">
-        <ConfirmRidePopUp setConfirmRidePopPanel={setConfirmRidePopPanel} setRidePopPanel={setRidePopPanel}/>
+      <div
+        ref={confirmRidePopPanelRef}
+        className="fixed w-full h-screen z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
+      >
+        <ConfirmRidePopUp
+          setConfirmRidePopPanel={setConfirmRidePopPanel}
+          setRidePopPanel={setRidePopPanel}
+        />
       </div>
     </div>
   );

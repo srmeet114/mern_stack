@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
@@ -9,7 +9,9 @@ import LookingForDriver from "../../components/LookingForDriver";
 import WaitingForDriver from "../../components/WaitingForDriver";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { FindTrips } from "../../server/api/api";
+import { createRides, FindTrips } from "../../server/api/api";
+import { useSocket } from "../../context/SocketContext";
+import { UserDataContext} from "../../context/UserContext";
 
 const Home = () => {
   const [panelOpen, setPanelOpen] = useState(null);
@@ -128,10 +130,23 @@ const Home = () => {
     [btnSow]
   );
 
-  const { register, handleSubmit, setValue,getValues } = useForm();
+  const { register, handleSubmit, setValue, getValues } = useForm();
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
   const [destinationSuggestions, setDestinationSuggestions] = useState([]);
   const [activeField, setActiveField] = useState(null);
+  const [vehiclrType, setvehiclrType] = useState(null);
+  const {socket} = useSocket()
+  const {user} = useContext(UserDataContext)
+
+  useEffect(()=>{
+    if (user && socket) {
+      socket.emit("join", { userType: "user", userId: user._id });
+    }
+  },[user, socket])
+
+  socket.on('ride-confirmed',ride=>{
+    setWaitingDriver(true)
+  })
 
   const fetchSuggestions = async (query, type) => {
     try {
@@ -170,7 +185,6 @@ const Home = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     console.log(e);
-    
   };
 
   const findTrip = () => {
@@ -178,10 +192,18 @@ const Home = () => {
     setPanelOpen(false);
 
     const values = getValues();
-    const pickup = values.pickup
-    const destination = values.destination
-    console.log(`Pickup: ${pickup}, Destination: ${destination}`);
-    FindTrips(pickup,destination);
+    const pickup = values.pickup;
+    const destination = values.destination;
+    
+    FindTrips(pickup, destination, setFare);
+  };
+
+  const createRide = () => {
+    const values = getValues();
+    const pickup = values.pickup;
+    const destination = values.destination;
+    const vehicleType = vehiclrType;
+    createRides(pickup, destination, vehicleType);
   };
 
   return (
@@ -223,7 +245,7 @@ const Home = () => {
               onClick={() => {
                 setPanelOpen("pickup");
                 setActiveField("pickup");
-                setbtnSow(true)
+                setbtnSow(true);
               }}
               type="text"
               placeholder="Add a pick-up location"
@@ -282,8 +304,11 @@ const Home = () => {
         className="fixed z-10 bottom-0 bg-white py-10 translate-y-full px-3 w-full pt-12"
       >
         <VehiclePanel
+          fare={fare}
+          createRide={createRide}
           setConfirmRidePanel={setConfirmRidePanel}
           setVehiclePanelOpne={setVehiclePanelOpne}
+          selectVehicle={setvehiclrType}
         />
       </div>
       <div
@@ -291,6 +316,11 @@ const Home = () => {
         className="fixed z-10 bottom-0 bg-white py-6 translate-y-full px-3 w-full pt-12"
       >
         <ConfirmRide
+          getValues={getValues}
+          createRide={createRide}
+          selectVehicle={setvehiclrType}
+          fare={fare}
+          vehiclrType={vehiclrType}
           setConfirmRidePanel={setConfirmRidePanel}
           setLookingForDriver={setLookingForDriver}
         />
@@ -299,7 +329,15 @@ const Home = () => {
         ref={lookingForDriverRef}
         className="fixed z-10 bottom-0 bg-white py-6 translate-y-full px-3 w-full pt-12"
       >
-        <LookingForDriver setLookingForDriver={setLookingForDriver} />
+        <LookingForDriver
+          getValues={getValues}
+          selectVehicle={setvehiclrType}
+          pickupSuggestions={pickupSuggestions}
+          destinationSuggestions={destinationSuggestions}
+          fare={fare}
+          vehiclrType={vehiclrType}
+          setLookingForDriver={setLookingForDriver}
+        />
       </div>
       <div
         ref={watingforDriverRef}

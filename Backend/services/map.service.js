@@ -1,18 +1,19 @@
 const axios = require('axios');
+const captainModel = require('../models/captain.model')
 
 module.exports.getAddressCoordinate = async (address) => {
   try {
     const response = await axios.get('https://maps.gomaps.pro/maps/api/geocode/json', {
       params: {
         address: address,
-        key: process.env.GOMAP_API_KEY // Ensure you have your GoMap API key in your environment variables
+        key: process.env.GOMAP_API_KEY
       }
     });
 
     const data = response.data;
     if (data.status === 'OK') {
       const { lat, lng } = data.results[0].geometry.location;
-      return { lat, lng };
+      return { ltd:lat, lng };
     } else {
       throw new Error('Unable to fetch coordinates');
     }
@@ -30,6 +31,7 @@ module.exports.getDistanceTime = async (origin, destination) => {
   const apiKey = process.env.GOMAP_API_KEY;
 
   const url = `https://maps.gomaps.pro/maps/api/distancematrix/json?origins=${encodeURIComponent(origin)}&destinations=${encodeURIComponent(destination)}&key=${apiKey}`;
+
   try {
     const response = await axios.get(url);
     const data = response.data;
@@ -38,7 +40,6 @@ module.exports.getDistanceTime = async (origin, destination) => {
       if (data.rows[0].elements[0].status === 'ZERO_RESULTS') {
         throw new Error('Unable to fetch distance and time');
       }
-      console.log("🚀 ~ module.exports.getDistanceTime= ~ data.rows[0].elements[0];:", data.rows[0].elements[0])
       return data.rows[0].elements[0];
     } else {
       throw new Error('Unable to fetch distance and time');
@@ -68,3 +69,16 @@ module.exports.getAutoCompleteSuggestions = async (input) =>{
     console.error('Error fetching auto complete suggestions:', error);
   }
 }
+
+module.exports.getCaptainsTheRedius = async (ltd, lng, radius) => {
+  
+  const captains = await captainModel.find({
+    location: {
+      $geoWithin: {
+        $centerSphere: [[ltd, lng], radius / 6371],
+      },
+    },
+  });
+  
+  return captains;
+};

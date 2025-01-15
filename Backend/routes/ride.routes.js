@@ -19,7 +19,12 @@ router.get('/get-fare/:pickup/:destination',
     rideController.getFare
 )
 
-// router.get('/get-fare/:pickup/:destination', authMiddleware.authUser, rideController.getFare);
+router.post('/confirm',
+    authMiddleware.authCaptain,
+    body('rideId').isMongoId().withMessage('Invaild ride id'),
+    rideController.confirmRide
+)
+
 
 
 module.exports = router;

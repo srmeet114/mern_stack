@@ -4,6 +4,11 @@ import { IoLocationSharp } from "react-icons/io5";
 import { RiUserLocationFill } from "react-icons/ri";
 
 const LookingForDriver = (props) => {
+
+  const values = props.getValues();
+  const pickup = values.pickup;
+  const destination = values.destination;
+
   return (
     <div>
       <h3
@@ -27,7 +32,7 @@ const LookingForDriver = (props) => {
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
               <p className="text-base text-gray-600 -mt-1">
-                Kankariya Talab, Bhopal
+              {pickup}
               </p>
             </div>
           </div>
@@ -36,14 +41,14 @@ const LookingForDriver = (props) => {
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
               <p className="text-base text-gray-600 -mt-1">
-                Kankariya Talab, Bhopal
+              {destination}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-4 p-2">
             <MdPayments className="text-xl" />
             <div>
-              <h3 className="text-lg font-medium">192.20</h3>
+              <h3 className="text-lg font-medium">₹{props.fare[props.vehiclrType]}</h3>
               <p className="text-base text-gray-600 -mt-1">Cash</p>
             </div>
           </div>
