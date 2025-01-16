@@ -31,7 +31,7 @@ const Riding = () => {
           />
           <div className="text-right">
             <h2 className="text-md font-medium capitalize">{ride.captain.fullname.firstname+" "+ride.captain.fullname.lastname}</h2>
-            <h2 className="text-xl font-semibold -mt-2">MP04 AB 1234</h2>
+            <h2 className="text-xl font-semibold -mt-2">{ride.captain.vehicle.plate}</h2>
             <p className="text-sm text-gray-600">maruti suzuki alto</p>
           </div>
         </div>
@@ -42,14 +42,14 @@ const Riding = () => {
               <div>
                 <h3 className="text-lg font-medium">562/11-A</h3>
                 <p className="text-base text-gray-600 -mt-1">
-                  Kankariya Talab, Bhopal
+                  {ride.destination}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-4 p-2">
               <MdPayments className="text-xl" />
               <div>
-                <h3 className="text-lg font-medium">192.20</h3>
+                <h3 className="text-lg font-medium">₹{ride.fare}</h3>
                 <p className="text-base text-gray-600 -mt-1">Cash</p>
               </div>
             </div>
