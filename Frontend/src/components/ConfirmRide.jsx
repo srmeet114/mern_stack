@@ -57,8 +57,8 @@ const ConfirmRide = (props) => {
         <button
           onClick={() => {
             props.setLookingForDriver(true),
-              props.setConfirmRidePanel(false),
-              props.createRide();
+            props.setConfirmRidePanel(false),
+            props.createRide();
           }}
           className="w-full mt-5 bg-green-600 active:bg-green-700 text-white font-semibold p-2 rounded-lg"
         >

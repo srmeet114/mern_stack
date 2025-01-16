@@ -12,6 +12,7 @@ import axios from "axios";
 import { createRides, FindTrips } from "../../server/api/api";
 import { useSocket } from "../../context/SocketContext";
 import { UserDataContext} from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [panelOpen, setPanelOpen] = useState(null);
@@ -135,8 +136,10 @@ const Home = () => {
   const [destinationSuggestions, setDestinationSuggestions] = useState([]);
   const [activeField, setActiveField] = useState(null);
   const [vehiclrType, setvehiclrType] = useState(null);
+  const [ride, setride] = useState(null)
   const {socket} = useSocket()
   const {user} = useContext(UserDataContext)
+  const navigate = useNavigate()
 
   useEffect(()=>{
     if (user && socket) {
@@ -144,8 +147,16 @@ const Home = () => {
     }
   },[user, socket])
 
-  socket.on('ride-confirmed',ride=>{
+  socket.on('ride-confirmed',(ride)=>{
+    console.log(ride);
+    setride(ride);
     setWaitingDriver(true)
+  })
+
+  socket.on('ride-started',(ride)=>{
+    console.log(ride);
+    setWaitingDriver(false)
+    navigate('/riding', { state: { ride} })
   })
 
   const fetchSuggestions = async (query, type) => {
@@ -343,7 +354,7 @@ const Home = () => {
         ref={watingforDriverRef}
         className="fixed z-10 bottom-0 bg-white translate-y-full py-6 px-3 w-full pt-12"
       >
-        <WaitingForDriver setWaitingDriver={setWaitingDriver} />
+        <WaitingForDriver ride={ride} setWaitingDriver={setWaitingDriver} />
       </div>
     </div>
   );

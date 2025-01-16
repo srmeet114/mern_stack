@@ -174,3 +174,15 @@ export const createRides = async (pickup,destination,vehicleType) =>{
     console.log(err);
   }
 }
+
+export const rideConfirm = async (navigate,rideId,otp,ride) =>{
+  try {
+    const response = await axios.get(`${url}/rides/start-ride/${rideId}/${otp}`,{headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`
+    }})
+    console.log(response)
+    navigate('/captainriding',{state:{ride:ride}})
+  } catch (error) {
+    console.log(error);
+  }
+}

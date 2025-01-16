@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { IoExitOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link,useLocation } from "react-router-dom";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";0
 import { MdOutlineKeyboardArrowUp } from "react-icons/md";
@@ -9,8 +9,10 @@ import FinishRide from "../../components/FinishRide";
 const CaptainRiding = (props) => {
 
     const [finishRidePanel, setFinishRidePanel] = useState(false)
-
     const finishRidePanelRef = useRef(null)
+    const location = useLocation()
+    const rideData = location.state?.ride
+    console.log("🚀 ~ CaptainRiding ~ rideData:", rideData)
 
     useGSAP(
         function () {
@@ -53,9 +55,6 @@ const CaptainRiding = (props) => {
       </div>
       <div className="h-1/5 p-6 flex items-center justify-between bg-yellow-300 relative" onClick={()=>{setFinishRidePanel(true)}}>
         <h3
-          onClick={() => {
-            props.setRidePopPanel(false);
-          }}
           className="p-1 text-center w-[90%] flex items-center justify-center absolute top-0"
         >
           <MdOutlineKeyboardArrowUp className="text-3xl text-[#fff]" />
@@ -66,7 +65,7 @@ const CaptainRiding = (props) => {
         </button>
       </div>
       <div ref={finishRidePanelRef} className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12">
-        <FinishRide setFinishRidePanel={setFinishRidePanel}/>
+        <FinishRide rideData={rideData} setFinishRidePanel={setFinishRidePanel}/>
       </div>
     </div>
   );

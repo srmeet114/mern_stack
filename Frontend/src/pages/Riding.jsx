@@ -2,9 +2,14 @@ import React from "react";
 import { IoLocationSharp } from "react-icons/io5";
 import { MdPayments } from "react-icons/md";
 import { TiHomeOutline } from "react-icons/ti";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Riding = () => {
+
+  const location = useLocation()
+  const ride = location.state?.ride 
+  console.log("🚀 ~ Riding ~ ride:", ride)
+  
   return (
     <div className="h-lvh">
       <Link to='/home' className="fixed h-10 w-10 bg-white flex items-center justify-center rounded-full top-3 left-3">
@@ -25,7 +30,7 @@ const Riding = () => {
             alt=""
           />
           <div className="text-right">
-            <h2 className="text-md font-medium">Sarthak</h2>
+            <h2 className="text-md font-medium capitalize">{ride.captain.fullname.firstname+" "+ride.captain.fullname.lastname}</h2>
             <h2 className="text-xl font-semibold -mt-2">MP04 AB 1234</h2>
             <p className="text-sm text-gray-600">maruti suzuki alto</p>
           </div>

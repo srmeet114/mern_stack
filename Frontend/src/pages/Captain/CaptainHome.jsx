@@ -42,7 +42,6 @@ const CaptainHome = () => {
   }, [captain.captain, socket]);
 
   socket.on('new-ride',(data)=>{
-    console.log(data)
     setRide(data)
     setRidePopPanel(true)
   })
@@ -60,7 +59,9 @@ const CaptainHome = () => {
         Authorization: `Bearer ${token}`,
       },
     })
+
     console.log(response);
+    
     
     socket.emit('confirm-ride',{
       userId: captain.captain._id,
@@ -143,6 +144,7 @@ const CaptainHome = () => {
         className="fixed w-full h-screen z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
       >
         <ConfirmRidePopUp
+          ride={ride}
           setConfirmRidePopPanel={setConfirmRidePopPanel}
           setRidePopPanel={setRidePopPanel}
         />
