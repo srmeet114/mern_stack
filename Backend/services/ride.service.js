@@ -28,9 +28,9 @@ async function getFare(pickup,destination) {
     }
 
     const fare = {
-        auto:baseFare.auto + ((distanceTime.distance.value/1000) * perKmRate.auto) + ((distanceTime.duration.value/60) * perMinuTeRate.auto),
-        car:baseFare.car + ((distanceTime.distance.value/1000) * perKmRate.car) + ((distanceTime.duration.value/60) * perMinuTeRate.car),
-        moto:baseFare.moto + ((distanceTime.distance.value/1000) * perKmRate.moto) + ((distanceTime.duration.value/60) * perMinuTeRate.moto)
+        auto: Math.round(baseFare.auto + ((distanceTime.distance.value / 1000) * perKmRate.auto) + ((distanceTime.duration.value / 60) * perMinuTeRate.auto)),
+        car: Math.round(baseFare.car + ((distanceTime.distance.value / 1000) * perKmRate.car) + ((distanceTime.duration.value / 60) * perMinuTeRate.car)),
+        moto: Math.round(baseFare.moto + ((distanceTime.distance.value / 1000) * perKmRate.moto) + ((distanceTime.duration.value / 60) * perMinuTeRate.moto))
     }
 
     return fare;
@@ -120,4 +120,32 @@ module.exports.startRide = async ({rideId,otp,captain})=>{
     })
 
     return ride
+}
+
+module.exports.endRide = async({rideId,captain}) =>{
+    if(!rideId || !captain) {
+        throw new Error('All fields are required');
+    }
+
+    const ride = await rideModel.findOne({
+        _id:rideId,
+        captain:captain._id
+    }).populate('user').populate('captain').select('+otp')
+
+    if(!ride) {
+        throw new Error('Ride not found');
+    }
+
+    if(ride.status !== 'ongoing') {
+        throw new Error('Ride not ongoing')
+    }
+
+    await rideModel.findByIdAndUpdate({
+        _id:rideId
+    },{
+        status:'completed',
+    })
+
+    return ride
+
 }

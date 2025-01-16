@@ -2,9 +2,18 @@ import React from "react";
 import { MdOutlineKeyboardArrowDown, MdPayments } from "react-icons/md";
 import { IoLocationSharp } from "react-icons/io5";
 import { RiUserLocationFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { endRides } from "../server/api/api";
+import { useNavigate } from "react-router-dom";
 
 const FinishRide = (props) => {
+
+  const navigate = useNavigate()
+
+  const endRide = () =>{
+    const rideId = props.rideData._id
+    endRides(rideId,navigate)
+  }
+
   return (
     <div>
       <h3
@@ -58,12 +67,12 @@ const FinishRide = (props) => {
           </div>
         </div>
         <div className="mt-6 w-full">
-            <Link
-              to="/captain-home"
+            <button
+              onClick={endRide}
               className="w-full block bg-green-600 text-center active:bg-green-700 text-white font-semibold p-2 rounded-lg mt-2"
             >
               Finis Ride
-            </Link>
+            </button>
             <p className="mt-6 text-xs text-center">click on finish ride button if you have completed the payment</p>
         </div>
       </div>

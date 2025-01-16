@@ -12,7 +12,6 @@ const CaptainRiding = (props) => {
     const finishRidePanelRef = useRef(null)
     const location = useLocation()
     const rideData = location.state?.ride
-    console.log("🚀 ~ CaptainRiding ~ rideData:", rideData)
 
     useGSAP(
         function () {

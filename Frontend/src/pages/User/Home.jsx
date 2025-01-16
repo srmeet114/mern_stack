@@ -148,13 +148,11 @@ const Home = () => {
   },[user, socket])
 
   socket.on('ride-confirmed',(ride)=>{
-    console.log(ride);
     setride(ride);
     setWaitingDriver(true)
   })
 
   socket.on('ride-started',(ride)=>{
-    console.log(ride);
     setWaitingDriver(false)
     navigate('/riding', { state: { ride} })
   })

@@ -32,6 +32,10 @@ router.get('/start-ride/:rideId/:otp',
     rideController.startRide
 )
 
-
+router.post('/end-ride',
+    authMiddleware.authCaptain,
+    body('rideId').isMongoId().withMessage('Invaild ride id'),  
+    rideController.endRide
+)
 
 module.exports = router;

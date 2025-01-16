@@ -2,13 +2,19 @@ import React from "react";
 import { IoLocationSharp } from "react-icons/io5";
 import { MdPayments } from "react-icons/md";
 import { TiHomeOutline } from "react-icons/ti";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {useSocket} from '../context/SocketContext';
 
 const Riding = () => {
 
   const location = useLocation()
   const ride = location.state?.ride 
-  console.log("🚀 ~ Riding ~ ride:", ride)
+  const {socket} = useSocket()
+  const navigate = useNavigate()
+
+  socket.on('ride-ended',()=>{
+    navigate('/home')
+  })
   
   return (
     <div className="h-lvh">

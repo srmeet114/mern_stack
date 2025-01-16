@@ -59,9 +59,6 @@ const CaptainHome = () => {
         Authorization: `Bearer ${token}`,
       },
     })
-
-    console.log(response);
-    
     
     socket.emit('confirm-ride',{
       userId: captain.captain._id,

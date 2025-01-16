@@ -13,7 +13,7 @@ export const SinupUser = async (
   try {
     const response = await axios.post(`${url}/users/register`, Sinupdata);
     notify(response.data.message);
-    setUser(response.data.user)
+    setUser(response.data.user);
     localStorage.setItem("token", response.data.token);
     reset();
     navigate("/login");
@@ -132,7 +132,12 @@ export const CaptainGetProfile = async (setCaptain, setLoading, navigate) => {
   }
 };
 
-export const UserGetProfile = async (setUser, setLoading, navigate,notifyerr) => {
+export const UserGetProfile = async (
+  setUser,
+  setLoading,
+  navigate,
+  notifyerr
+) => {
   try {
     const response = await axios.get(`${url}/users/profile`, {
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -141,48 +146,70 @@ export const UserGetProfile = async (setUser, setLoading, navigate,notifyerr) =>
   } catch (err) {
     console.log(err);
     localStorage.removeItem("token");
-    notifyerr(err.message)
+    notifyerr(err.message);
     navigate("/login");
-  }finally {
+  } finally {
     setLoading(false);
   }
 };
 
-export const FindTrips = async (pickup,destination,setFare) =>{
-
+export const FindTrips = async (pickup, destination, setFare) => {
   try {
-    const response = await axios.get(`${url}/rides/get-fare/${pickup}/${destination}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`
+    const response = await axios.get(
+      `${url}/rides/get-fare/${pickup}/${destination}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       }
-    });
-    console.log(response.data);
-    setFare(response.data)
+    );
+    setFare(response.data);
   } catch (err) {
     console.log(err);
   }
-}
+};
 
-export const createRides = async (pickup,destination,vehicleType) =>{
+export const createRides = async (pickup, destination, vehicleType) => {
   try {
-    const response = await axios.post(`${url}/rides/create`,{pickup,destination,vehicleType},{headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`
-    }})
-    console.log(response);
-    
-  }catch (err) {
+    const response = await axios.post(
+      `${url}/rides/create`,
+      { pickup, destination, vehicleType },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+  } catch (err) {
     console.log(err);
   }
-}
+};
 
-export const rideConfirm = async (navigate,rideId,otp,ride) =>{
+export const rideConfirm = async (navigate, rideId, otp, ride) => {
   try {
-    const response = await axios.get(`${url}/rides/start-ride/${rideId}/${otp}`,{headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`
-    }})
-    console.log(response)
-    navigate('/captainriding',{state:{ride:ride}})
+    const response = await axios.get(
+      `${url}/rides/start-ride/${rideId}/${otp}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    navigate("/captainriding", { state: { ride: ride } });
   } catch (error) {
     console.log(error);
   }
-}
+};
+
+export const endRides = async (rideId,navigate) => {
+  try {
+    const response = await axios.post(`${url}/rides/end-ride`,{rideId}, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    navigate('/captain-home')
+  } catch (error) {
+    console.log(error);
+  }
+};
