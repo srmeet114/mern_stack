@@ -13,6 +13,7 @@ import { createRides, FindTrips } from "../../server/api/api";
 import { useSocket } from "../../context/SocketContext";
 import { UserDataContext} from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import LiveTracking from "../../components/LiveTracking";
 
 const Home = () => {
   const [panelOpen, setPanelOpen] = useState(null);
@@ -233,6 +234,7 @@ const Home = () => {
           src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
           alt=""
         />
+        {/* <LiveTracking /> */}
       </div>
       <div className="flex flex-col justify-end h-screen absolute top-0 w-full">
         <div className="h-[30%] p-5 bg-white relative">
