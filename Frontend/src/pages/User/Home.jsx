@@ -13,7 +13,6 @@ import { createRides, FindTrips, logoutUsers } from "../../server/api/api";
 import { useSocket } from "../../context/SocketContext";
 import { UserDataContext} from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import LiveTracking from "../../components/LiveTracking";
 import { IoExitOutline } from "react-icons/io5";
 
 const Home = () => {
