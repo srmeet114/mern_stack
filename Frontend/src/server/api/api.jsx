@@ -44,7 +44,7 @@ export const SinInUser = async (
   }
 };
 
-export const LogoutUser = async () => {
+export const LogoutUser = async (navigate) => {
   axios
     .get(`${url}/users/logout`, {
       headers: {
@@ -54,8 +54,14 @@ export const LogoutUser = async () => {
     .then((res) => {
       if (res.status === 200) {
         localStorage.removeItem("token");
+        navigate("/login");
       }
     });
+};
+
+export const logoutUsers = async (navigate) => {
+  localStorage.removeItem("token");
+  navigate("/login");
 };
 
 export const CaptainsRegister = async (
@@ -98,6 +104,11 @@ export const CaptainsLogin = async (
     console.log(err);
     notifyerr(err.response?.data.errors || err.message);
   }
+};
+
+export const CaptainsUsers = async (navigate) => {
+  localStorage.removeItem("token");
+  navigate("/captain-login");
 };
 
 export const LogoutCaptain = async () => {
@@ -201,14 +212,18 @@ export const rideConfirm = async (navigate, rideId, otp, ride) => {
   }
 };
 
-export const endRides = async (rideId,navigate) => {
+export const endRides = async (rideId, navigate) => {
   try {
-    const response = await axios.post(`${url}/rides/end-ride`,{rideId}, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
-    navigate('/captain-home')
+    const response = await axios.post(
+      `${url}/rides/end-ride`,
+      { rideId },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    navigate("/captain-home");
   } catch (error) {
     console.log(error);
   }

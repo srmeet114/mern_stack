@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { IoExitOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import RidePopUp from "../../components/RidePopUp";
@@ -9,6 +8,8 @@ import ConfirmRidePopUp from "../../components/ConfirmRidePopUp";
 import { useSocket } from "../../context/SocketContext";
 import { CaptainDataContext } from "../../context/CaptainContext";
 import axios from "axios";
+import { CaptainsUsers } from "../../server/api/api";
+import { useNavigate } from "react-router-dom";
 
 const CaptainHome = () => {
   const [ridePopPanel, setRidePopPanel] = useState(false);
@@ -18,6 +19,7 @@ const CaptainHome = () => {
   const confirmRidePopPanelRef = useRef(null);
   const { socket } = useSocket();
   const { captain } = useContext(CaptainDataContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     socket.emit("join", { userType: "captain", userId: captain.captain._id });
@@ -99,6 +101,10 @@ const CaptainHome = () => {
     [confirmRidePopPanel]
   );
 
+  const logOut = () =>{
+    CaptainsUsers(navigate)
+  }
+
   return (
     <div className="h-screen">
       <div className="fixed p-3 top-0 flex items-center justify-between w-screen">
@@ -107,12 +113,12 @@ const CaptainHome = () => {
           src="https://w7.pngwing.com/pngs/801/240/png-transparent-uber-hd-logo.png"
           alt=""
         />
-        <Link
-          to="/home"
+        <button
+          onClick={logOut}
           className=" h-10 w-10 bg-white flex items-center justify-center rounded-full"
         >
           <IoExitOutline className="text-2xl" />
-        </Link>
+        </button>
       </div>
 
       <div className="h-3/5">

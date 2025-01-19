@@ -9,11 +9,12 @@ import LookingForDriver from "../../components/LookingForDriver";
 import WaitingForDriver from "../../components/WaitingForDriver";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { createRides, FindTrips } from "../../server/api/api";
+import { createRides, FindTrips, logoutUsers } from "../../server/api/api";
 import { useSocket } from "../../context/SocketContext";
 import { UserDataContext} from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import LiveTracking from "../../components/LiveTracking";
+import { IoExitOutline } from "react-icons/io5";
 
 const Home = () => {
   const [panelOpen, setPanelOpen] = useState(null);
@@ -216,13 +217,25 @@ const Home = () => {
     createRides(pickup, destination, vehicleType);
   };
 
+  const logOut = () =>{
+    logoutUsers(navigate)
+  }
+
   return (
-    <div className="h-screen relative overflow-hidden">
-      <img
-        className="w-16 absolute left-5 top-5"
-        src="https://w7.pngwing.com/pngs/801/240/png-transparent-uber-hd-logo.png"
-        alt=""
-      />
+    <div className="h-screen overflow-hidden">
+      <div className="fixed p-3 top-0 flex items-center justify-between w-screen z-10">
+        <img
+          className="w-16"
+          src="https://w7.pngwing.com/pngs/801/240/png-transparent-uber-hd-logo.png"
+          alt=""
+        />
+        <button
+          onClick={logOut}
+          className=" h-10 w-10 bg-white flex items-center justify-center rounded-full cursor-pointer"
+        >
+          <IoExitOutline className="text-2xl" />
+        </button>
+      </div>
       <div
         onClick={() => {
           setVehiclePanelOpne(false);

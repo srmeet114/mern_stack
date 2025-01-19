@@ -15,7 +15,6 @@ module.exports.createRide = async (req, res) => {
     const userId = req.user._id;
 
     const pickupCoordinates = await mapService.getAddressCoordinate(pickup);
-    console.log(pickupCoordinates);
 
     // Find captains in radius
     const captainsInRadius = await mapService.getCaptainsTheRedius(pickupCoordinates.ltd, pickupCoordinates.lng, 1000);
@@ -87,7 +86,6 @@ module.exports.startRide = async(req,res)=>{
   try{
     const {rideId,otp} = req.params;
     const ride = await rideService.startRide({rideId,otp,captain:req.captain});
-    console.log("🚀 ~ module.exports.startRide=async ~ ride:", ride)
     sendMessageToSocketId(ride.user.socketId,{
       event: 'ride-started',
       data:ride

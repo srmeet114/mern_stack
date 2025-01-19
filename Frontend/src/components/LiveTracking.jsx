@@ -7,8 +7,8 @@ const containerStyle = {
 };
 
 const defaultCenter = {
-  lat: 40.712776, // Default latitude
-  lng: -74.005974 // Default longitude
+  lat: 40.712776,
+  lng: -74.005974
 };
 
 const LiveTracking = () => {

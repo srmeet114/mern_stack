@@ -1,8 +1,10 @@
 import React from "react";
 import { LogoutUser } from "../server/api/api";
+import { useNavigate } from "react-router-dom";
 
 const UserLogout = () => {
-  LogoutUser();
+  const navigate = useNavigate();
+  LogoutUser(navigate);
 
   return <div></div>;
 };
