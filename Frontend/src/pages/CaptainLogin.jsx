@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { CaptainsLogin } from "../server/api/api";
@@ -13,13 +13,14 @@ const CaptainLogin = () => {
     reset,
   } = useForm();
 
-  const {captain, setCaptain} = useContext(CaptainDataContext);
+  const { captain, setCaptain } = useContext(CaptainDataContext);
   const navigate = useNavigate();
   const notify = (message) => toast.success(message);
   const notifyerr = (message) => toast.error(message);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = (Data) => {
-    CaptainsLogin(reset, Data, navigate, notify, notifyerr, setCaptain);
+    CaptainsLogin(reset, Data, navigate, notify, notifyerr, setCaptain, setLoading);
   };
   return (
     <div className="p-7 flex flex-col justify-between h-screen">
@@ -66,8 +67,15 @@ const CaptainLogin = () => {
             <p className="text-red-500">{errors.password.message}</p>
           )}
 
-          <button className="bg-[#111] mt-7 text-[#fff] font-medium rounded-lg mb-4 px-4 py-2 border w-full text-lg placeholder:text-base">
-            Login
+          <button
+            type="submit"
+            className="bg-[#111] mt-7 text-[#fff] font-medium rounded-lg mb-4 px-4 py-2 border w-full text-lg placeholder:text-base flex justify-center items-center"
+          >
+            {loading ? (
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-[#fff]" />
+            ) : (
+              "Login"
+            )}
           </button>
           <p className="text-center">
             Join a fleet?{" "}

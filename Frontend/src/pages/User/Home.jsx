@@ -13,7 +13,6 @@ import { createRides, FindTrips, logoutUsers } from "../../server/api/api";
 import { useSocket } from "../../context/SocketContext";
 import { UserDataContext} from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import LiveTracking from "../../components/LiveTracking";
 import { IoExitOutline } from "react-icons/io5";
 
 const Home = () => {
@@ -122,11 +121,11 @@ const Home = () => {
     function () {
       if (btnSow) {
         gsap.to(btnSowRef.current, {
-          opacity: 1,
+          display:"flex"
         });
       } else {
         gsap.to(btnSowRef.current, {
-          opacity: 0,
+          display:"none"
         });
       }
     },
@@ -217,24 +216,24 @@ const Home = () => {
     createRides(pickup, destination, vehicleType);
   };
 
-  const logOut = () =>{
-    logoutUsers(navigate)
-  }
+  // const logOut = () =>{
+  //   logoutUsers(navigate)
+  // }
 
   return (
     <div className="h-screen overflow-hidden">
-      <div className="fixed p-3 top-0 flex items-center justify-between w-screen z-10">
+      <div className="fixed p-3 top-0 w-screen">
         <img
           className="w-16"
           src="https://w7.pngwing.com/pngs/801/240/png-transparent-uber-hd-logo.png"
           alt=""
         />
-        <button
+        {/* <button
           onClick={logOut}
           className=" h-10 w-10 bg-white flex items-center justify-center rounded-full cursor-pointer"
         >
           <IoExitOutline className="text-2xl" />
-        </button>
+        </button> */}
       </div>
       <div
         onClick={() => {
@@ -285,6 +284,7 @@ const Home = () => {
               onClick={() => {
                 setPanelOpen("destination");
                 setActiveField("destination");
+                setbtnSow(true);
               }}
               type="text"
               placeholder="Enter your destination"
@@ -300,7 +300,7 @@ const Home = () => {
             ref={btnSowRef}
             onClick={findTrip}
             type="submit"
-            className="bg-black text-white px-4 py-2 rounded-lg mt-3 w-full"
+            className="bg-black text-white px-4 py-2 rounded-lg mt-3 w-full hidden justify-center"
           >
             Find Trip
           </button>
