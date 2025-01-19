@@ -325,7 +325,7 @@ const Home = () => {
       </div>
       <div
         ref={vehiclePanelRef}
-        className="fixed z-10 bottom-0 bg-white py-10 translate-y-full px-3 w-full pt-12"
+        className="fixed z-10 bottom-0 bg-white pt-2 pb-10 translate-y-full px-3 w-full"
       >
         <VehiclePanel
           fare={fare}
@@ -337,7 +337,7 @@ const Home = () => {
       </div>
       <div
         ref={confirmRidePanelRef}
-        className="fixed z-10 bottom-0 bg-white py-6 translate-y-full px-3 w-full pt-12"
+        className="fixed z-10 bottom-0 bg-white translate-y-full px-3 w-full pb-20"
       >
         <ConfirmRide
           getValues={getValues}
@@ -351,7 +351,7 @@ const Home = () => {
       </div>
       <div
         ref={lookingForDriverRef}
-        className="fixed z-10 bottom-0 bg-white py-6 translate-y-full px-3 w-full pt-12"
+        className="fixed z-10 bottom-0 bg-white translate-y-full px-3 w-full"
       >
         <LookingForDriver
           getValues={getValues}

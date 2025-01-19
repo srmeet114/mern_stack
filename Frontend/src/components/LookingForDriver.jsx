@@ -4,22 +4,24 @@ import { IoLocationSharp } from "react-icons/io5";
 import { RiUserLocationFill } from "react-icons/ri";
 
 const LookingForDriver = (props) => {
-
   const values = props.getValues();
   const pickup = values.pickup;
   const destination = values.destination;
 
   return (
     <div>
-      <h3
-        onClick={() => {
-          props.setLookingForDriver(false);
-        }}
-        className="py-1 text-center flex justify-center w-[93%] absolute top-0"
-      >
-        <MdOutlineKeyboardArrowDown className="text-3xl text-[#dadada]" />
-      </h3>
-      <h3 className="text-2xl font-semibold mb-5">Looking for a Driver</h3>
+      <div className="flex justify-between pt-2">
+        <h3 className="text-2xl font-semibold mb-5">Looking for a Driver</h3>
+        <h3
+          onClick={() => {
+            props.setLookingForDriver(false);
+          }}
+          className="py-1 text-center flex justify-center top-0"
+        >
+          <MdOutlineKeyboardArrowDown className="text-3xl text-[#dadada]" />
+        </h3>
+      </div>
+
       <div className="flex justify-between items-center flex-col gap-2">
         <img
           className="h-20"
@@ -31,24 +33,22 @@ const LookingForDriver = (props) => {
             <RiUserLocationFill className="text-xl" />
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
-              <p className="text-base text-gray-600 -mt-1">
-              {pickup}
-              </p>
+              <p className="text-base text-gray-600 -mt-1">{pickup}</p>
             </div>
           </div>
           <div className="flex items-center gap-4 p-2 border-b-2">
             <IoLocationSharp className="text-xl" />
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
-              <p className="text-base text-gray-600 -mt-1">
-              {destination}
-              </p>
+              <p className="text-base text-gray-600 -mt-1">{destination}</p>
             </div>
           </div>
           <div className="flex items-center gap-4 p-2">
             <MdPayments className="text-xl" />
             <div>
-              <h3 className="text-lg font-medium">₹{props.fare[props.vehiclrType]}</h3>
+              <h3 className="text-lg font-medium">
+                ₹{props.fare[props.vehiclrType]}
+              </h3>
               <p className="text-base text-gray-600 -mt-1">Cash</p>
             </div>
           </div>

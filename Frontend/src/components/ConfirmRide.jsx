@@ -10,15 +10,17 @@ const ConfirmRide = (props) => {
 
   return (
     <div>
-      <h3
-        onClick={() => {
-          props.setConfirmRidePanel(false);
-        }}
-        className="py-1 text-center flex justify-center w-[93%] absolute top-0"
-      >
-        <MdOutlineKeyboardArrowDown className="text-3xl text-[#dadada]" />
-      </h3>
-      <h3 className="text-2xl font-semibold mb-5">Confirm your Ride</h3>
+      <div className="flex justify-between mt-3">
+        <h3 className="text-2xl font-semibold mb-5">Confirm your Ride</h3>
+        <h3
+          onClick={() => {
+            props.setConfirmRidePanel(false);
+          }}
+          className="py-1 text-center flex justify-center top-0"
+        >
+          <MdOutlineKeyboardArrowDown className="text-4xl text-[#b3b3b3]" />
+        </h3>
+      </div>
       <div className="flex justify-between items-center flex-col gap-2">
         <img
           className="h-20"
@@ -30,18 +32,14 @@ const ConfirmRide = (props) => {
             <RiUserLocationFill className="text-xl" />
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
-              <p className="text-base text-gray-600 -mt-1">
-                {pickup}
-              </p>
+              <p className="text-base text-gray-600 -mt-1">{pickup}</p>
             </div>
           </div>
           <div className="flex items-center gap-4 p-2 border-b-2">
             <IoLocationSharp className="text-xl" />
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
-              <p className="text-base text-gray-600 -mt-1">
-                {destination}
-              </p>
+              <p className="text-base text-gray-600 -mt-1">{destination}</p>
             </div>
           </div>
           <div className="flex items-center gap-4 p-2">
@@ -57,8 +55,8 @@ const ConfirmRide = (props) => {
         <button
           onClick={() => {
             props.setLookingForDriver(true),
-            props.setConfirmRidePanel(false),
-            props.createRide();
+              props.setConfirmRidePanel(false),
+              props.createRide();
           }}
           className="w-full mt-5 bg-green-600 active:bg-green-700 text-white font-semibold p-2 rounded-lg"
         >
