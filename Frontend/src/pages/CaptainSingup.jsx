@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import CaptainDataContext from "../context/CaptainContext";
@@ -14,9 +14,10 @@ const CaptainSignup = () => {
   } = useForm();
 
   const { captain, setCaptain } = useContext(CaptainDataContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const notify = (message) => toast.success(message);
   const notifyerr = (message) => toast.error(message);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = (data) => {
     const Data = {
@@ -33,7 +34,7 @@ const CaptainSignup = () => {
         vehicleType: data.vehicleType,
       },
     };
-    CaptainsRegister(reset,Data,navigate,notify,notifyerr,setCaptain)
+    CaptainsRegister(reset, Data, navigate, notify, notifyerr, setCaptain, setLoading);
   };
 
   return (
@@ -186,8 +187,15 @@ const CaptainSignup = () => {
               )}
             </div>
           </div>
-          <button className="bg-[#111] mt-7 text-[#fff] font-medium rounded-lg mb-4 px-4 py-2 border w-full text-lg placeholder:text-base">
-            Signup
+          <button
+            type="submit"
+            className="bg-[#111] mt-7 text-[#fff] font-medium rounded-lg mb-4 px-4 py-2 border w-full text-lg placeholder:text-base flex justify-center items-center"
+          >
+            {loading ? (
+              <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-[#fff]" />
+            ) : (
+              "Signup"
+            )}
           </button>
           <p className="text-center">
             Already have an account?{" "}

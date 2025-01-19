@@ -1,4 +1,5 @@
 import axios from "axios";
+// import Cookies from 'js-cookie';
 
 const url = import.meta.env.VITE_BASE_URL;
 
@@ -8,9 +9,11 @@ export const SinupUser = async (
   navigate,
   notify,
   notifyerr,
-  setUser
+  setUser,
+  setLoading
 ) => {
   try {
+    setLoading(true)
     const response = await axios.post(`${url}/users/register`, Sinupdata);
     notify(response.data.message);
     setUser(response.data.user);
@@ -20,6 +23,8 @@ export const SinupUser = async (
   } catch (err) {
     console.log(err);
     notifyerr(err.response?.data.errors || err.message);
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -29,35 +34,40 @@ export const SinInUser = async (
   notifyerr,
   reset,
   navigate,
-  setUser
+  setUser,
+  setLoading
 ) => {
   try {
+    setLoading(true)
     const response = await axios.post(`${url}/users/login`, Sinindata);
     notify(response.data.message);
     localStorage.setItem("token", response.data.token);
+    // Cookies.set('token', response.data.token, { expires: 7 }); // Expires in 7 days
     setUser(response.data.user);
     reset();
     navigate("/home");
   } catch (err) {
     console.log(err);
     notifyerr(err.response?.data.errors || err.message);
+  } finally {
+    setLoading(false)
   }
 };
 
-export const LogoutUser = async (navigate) => {
-  axios
-    .get(`${url}/users/logout`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-    .then((res) => {
-      if (res.status === 200) {
-        localStorage.removeItem("token");
-        navigate("/login");
-      }
-    });
-};
+// export const LogoutUser = async (navigate) => {
+//   axios
+//     .get(`${url}/users/logout`, {
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem("token")}`,
+//       },
+//     })
+//     .then((res) => {
+//       if (res.status === 200) {
+//         localStorage.removeItem("token");
+//         navigate("/login");
+//       }
+//     });
+// };
 
 export const logoutUsers = async (navigate) => {
   localStorage.removeItem("token");
@@ -70,9 +80,11 @@ export const CaptainsRegister = async (
   navigate,
   notify,
   notifyerr,
-  setCaptain
+  setCaptain,
+  setLoading
 ) => {
   try {
+    setLoading(true)
     const response = await axios.post(`${url}/captains/register`, Data);
     localStorage.setItem("token", response.data.token);
     setCaptain(response.captain);
@@ -82,6 +94,8 @@ export const CaptainsRegister = async (
     notifyerr(err.response?.data.errors || err.message);
   } catch (err) {
     console.log(err);
+  } finally {
+    setLoading(false)
   }
 };
 
@@ -91,9 +105,11 @@ export const CaptainsLogin = async (
   navigate,
   notify,
   notifyerr,
-  setCaptain
+  setCaptain,
+  setLoading
 ) => {
   try {
+    setLoading(true)
     const response = await axios.post(`${url}/captains/login`, Data);
     localStorage.setItem("token", response.data.token);
     setCaptain(response.data.captain);
@@ -103,6 +119,8 @@ export const CaptainsLogin = async (
   } catch (err) {
     console.log(err);
     notifyerr(err.response?.data.errors || err.message);
+  } finally {
+    setLoading(false)
   }
 };
 
