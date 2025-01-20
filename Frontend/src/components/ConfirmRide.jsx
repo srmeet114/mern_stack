@@ -10,7 +10,7 @@ const ConfirmRide = (props) => {
 
   return (
     <div>
-      <div className="flex justify-between mt-3">
+      <div className="flex justify-between mt-3 ">
         <h3 className="text-2xl font-semibold mb-5">Confirm your Ride</h3>
         <h3
           onClick={() => {
@@ -58,7 +58,7 @@ const ConfirmRide = (props) => {
               props.setConfirmRidePanel(false),
               props.createRide();
           }}
-          className="w-full mt-5 bg-green-600 active:bg-green-700 text-white font-semibold p-2 rounded-lg"
+          className="w-full mt-5 bg-green-600 active:bg-green-700 text-white font-semibold p-2 rounded-lg mb-10"
         >
           Confirm
         </button>
